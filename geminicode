@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Dashboard: Subject Investigation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .nav-btn.active {
+            border-bottom: 2px solid #b45309;
+            color: #92400e;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Amber/Bronze accents -->
+    
+    <!-- Application Structure Plan: The application is designed as an investigative OSINT dashboard. Because the user provided a "research plan" rather than a completed report, the structure is task-oriented. It features a top navigation bar allowing users to switch between the 'Subject Briefing' (known facts), the 'Research Objectives' (the user's prompt), and the 'Social Graph Analysis' (interactive data based on the requested Instagram audit). This modular approach allows investigators to separate known facts from active analysis, preventing information overload. -->
+    
+    <!-- Visualization & Content Choices: 
+         1. Subject Profile -> Goal: Inform -> Presentation: Clean text cards -> Interaction: None -> Justification: Establishes baseline facts.
+         2. Research Plan -> Goal: Organize -> Presentation: Interactive Checklist -> Interaction: Clickable toggles -> Justification: Keeps the investigation focused on the user's explicit goals.
+         3. Instagram Demographics -> Goal: Categorize -> Presentation: Doughnut Chart (Chart.js) -> Interaction: Click segments to filter below table -> Justification: Visually breaks down the 'kith, kin, marriage' prompt requirement and acts as a dynamic filter for large datasets.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <header class="bg-white border-b border-stone-200 shadow-sm sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-stone-900 tracking-tight">OSINT Investigation File</h1>
+                <p class="text-sm text-stone-500 mt-1">Subject: Patrick Shyu ("TechLead")</p>
+            </div>
+            <div class="hidden sm:block">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                    Status: Active Investigation
+                </span>
+            </div>
+        </div>
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 flex space-x-6 overflow-x-auto">
+            <button class="nav-btn active pb-3 text-stone-600 hover:text-stone-900 transition-colors whitespace-nowrap" data-target="briefing">Subject Briefing</button>
+            <button class="nav-btn pb-3 text-stone-600 hover:text-stone-900 transition-colors whitespace-nowrap" data-target="objectives">Research Objectives</button>
+            <button class="nav-btn pb-3 text-stone-600 hover:text-stone-900 transition-colors whitespace-nowrap" data-target="analysis">Social Graph Analysis</button>
+        </nav>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8 w-full">
+
+        <section id="briefing" class="view-section">
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-stone-900 mb-2">Subject Briefing & Background</h2>
+                <p class="text-stone-600 leading-relaxed">This section establishes the known baseline facts regarding the subject prior to executing the new research plan. It consolidates public information to provide context for the investigation into his current marital status.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-sm font-bold text-stone-400 uppercase tracking-wider mb-4">Known Aliases & Roles</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-amber-600 mr-2 font-bold">»</span>
+                            <div>
+                                <span class="block font-medium text-stone-800">Patrick Shyu</span>
+                                <span class="text-sm text-stone-500">Legal Name</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-600 mr-2 font-bold">»</span>
+                            <div>
+                                <span class="block font-medium text-stone-800">TechLead</span>
+                                <span class="text-sm text-stone-500">YouTube Persona / Content Creator</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-600 mr-2 font-bold">»</span>
+                            <div>
+                                <span class="block font-medium text-stone-800">Founder</span>
+                                <span class="text-sm text-stone-500">Million Token (MM)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-sm font-bold text-stone-400 uppercase tracking-wider mb-4">Historical Marital Status</h3>
+                    <div class="prose text-stone-600 text-sm">
+                        <p class="mb-2"><strong>Status:</strong> Previously Married / Divorced.</p>
+                        <p class="mb-2"><strong>Context:</strong> The subject publicly documented his divorce from his previous wife on his YouTube channel in late 2019 / early 2020, citing geographical moves and career stress as contributing factors.</p>
+                        <p><strong>Current Intelligence Gap:</strong> Information regarding a subsequent marriage or current serious relationship is unverified. The attached research plan aims to close this gap.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="objectives" class="view-section hidden">
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-stone-900 mb-2">Amended Research Objectives</h2>
+                <p class="text-stone-600 leading-relaxed">This section outlines the specific investigatory tasks defined by the user. Use these interactive checkboxes to track the progress of the social media audit.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
+                <div class="p-6 bg-stone-50 border-b border-stone-100">
+                    <h3 class="font-medium text-stone-800">Execution Plan: "Instagram Social Graph Audit"</h3>
+                </div>
+                <div class="p-0">
+                    <div class="flex items-center p-4 border-b border-stone-100 hover:bg-stone-50 transition-colors cursor-pointer toggle-task">
+                        <div class="w-6 h-6 rounded border-2 border-stone-300 flex items-center justify-center mr-4 text-white check-indicator transition-colors"></div>
+                        <div>
+                            <p class="font-medium text-stone-800">Identify Target Audience</p>
+                            <p class="text-sm text-stone-500">Isolate women following Patrick Shyu on his official Instagram account.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center p-4 border-b border-stone-100 hover:bg-stone-50 transition-colors cursor-pointer toggle-task">
+                        <div class="w-6 h-6 rounded border-2 border-stone-300 flex items-center justify-center mr-4 text-white check-indicator transition-colors"></div>
+                        <div>
+                            <p class="font-medium text-stone-800">Categorize Relationships</p>
+                            <p class="text-sm text-stone-500">Analyze interactions to categorize into: Kith, Kin, Professional, or Potential Partner.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center p-4 border-b border-stone-100 hover:bg-stone-50 transition-colors cursor-pointer toggle-task">
+                        <div class="w-6 h-6 rounded border-2 border-stone-300 flex items-center justify-center mr-4 text-white check-indicator transition-colors"></div>
+                        <div>
+                            <p class="font-medium text-stone-800">Cross-Reference Public Records</p>
+                            <p class="text-sm text-stone-500">Check identified highly-interactive accounts against public marriage registries in known jurisdictions.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center p-4 hover:bg-stone-50 transition-colors cursor-pointer toggle-task">
+                        <div class="w-6 h-6 rounded border-2 border-stone-300 flex items-center justify-center mr-4 text-white check-indicator transition-colors"></div>
+                        <div>
+                            <p class="font-medium text-stone-800">Synthesize Findings</p>
+                            <p class="text-sm text-stone-500">Update definitive status on current marital standing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="view-section hidden">
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-stone-900 mb-2">Social Graph Analysis (Simulated Data)</h2>
+                <p class="text-stone-600 leading-relaxed">This interactive dashboard visualizes the findings of the Instagram audit. The chart categorizes the analyzed demographic based on their suspected relationship to the subject. <strong>Click on a chart segment to filter the detailed profile list below.</strong></p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-center font-medium text-stone-800 mb-4">Follower Relationship Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="followerChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-stone-400 mt-4">Data based on simulated sampling of targeted demographic.</p>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden h-full flex flex-col">
+                        <div class="p-4 bg-stone-50 border-b border-stone-100 flex justify-between items-center">
+                            <h3 class="font-medium text-stone-800">Analyzed Profiles</h3>
+                            <button id="resetFilterBtn" class="text-sm text-amber-700 hover:text-amber-900 hidden">Clear Filters</button>
+                        </div>
+                        <div class="p-0 overflow-y-auto max-h-[500px]" id="profileList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const mockProfiles = [
+            { id: 'usr_01', handle: '@crypto_analyst', category: 'Professional', notes: 'Interacts with Million Token posts. No personal connection found.' },
+            { id: 'usr_02', handle: '@tech_recruiter_sf', category: 'Professional', notes: 'Connected via LinkedIn previously.' },
+            { id: 'usr_03', handle: '@family_member_s', category: 'Kin (Family)', notes: 'Shared surname, tagged in historical family photos (2018).' },
+            { id: 'usr_04', handle: '@college_friend', category: 'Kith (Friend)', notes: 'Mutuals with several known college associates.' },
+            { id: 'usr_05', handle: '@unknown_private1', category: 'Unknown/Unverified', notes: 'Private account. Frequent likes on non-tech related posts.' },
+            { id: 'usr_06', handle: '@youtube_collab', category: 'Professional', notes: 'Fellow content creator.' },
+            { id: 'usr_07', handle: '@crypto_fan_99', category: 'Fan/Audience', notes: 'Comments on all financial advice videos.' },
+            { id: 'usr_08', handle: '@unknown_private2', category: 'Unknown/Unverified', notes: 'Tagged in a deleted story. Investigation ongoing.' },
+            { id: 'usr_09', handle: '@cousin_j', category: 'Kin (Family)', notes: 'Confirmed relative via public Facebook graph.' },
+            { id: 'usr_10', handle: '@dev_designer', category: 'Professional', notes: 'Former coworker at Facebook.' }
+        ];
+
+        const categoryCounts = {
+            'Professional': 4,
+            'Fan/Audience': 1,
+            'Kin (Family)': 2,
+            'Kith (Friend)': 1,
+            'Unknown/Unverified': 2
+        };
+
+        const chartColors = {
+            'Professional': '#9ca3af',
+            'Fan/Audience': '#d6d3d1',
+            'Kin (Family)': '#fbbf24',
+            'Kith (Friend)': '#fcd34d',
+            'Unknown/Unverified': '#b45309'
+        };
+
+        let followerChartInstance = null;
+
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const targetId = e.target.getAttribute('data-target');
+                document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+                document.getElementById(targetId).classList.remove('hidden');
+
+                if (targetId === 'analysis' && !followerChartInstance) {
+                    initChart();
+                }
+            });
+        });
+
+        document.querySelectorAll('.toggle-task').forEach(task => {
+            task.addEventListener('click', function() {
+                const indicator = this.querySelector('.check-indicator');
+                if (indicator.innerHTML === '') {
+                    indicator.innerHTML = '✓';
+                    indicator.classList.remove('border-stone-300');
+                    indicator.classList.add('bg-amber-600', 'border-amber-600');
+                } else {
+                    indicator.innerHTML = '';
+                    indicator.classList.add('border-stone-300');
+                    indicator.classList.remove('bg-amber-600', 'border-amber-600');
+                }
+            });
+        });
+
+        function renderProfiles(filterCategory = null) {
+            const list = document.getElementById('profileList');
+            list.innerHTML = '';
+
+            const filtered = filterCategory 
+                ? mockProfiles.filter(p => p.category === filterCategory)
+                : mockProfiles;
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="p-6 text-center text-stone-500">No profiles found for this category.</div>';
+                return;
+            }
+
+            filtered.forEach(profile => {
+                const bgClass = profile.category === 'Unknown/Unverified' ? 'bg-amber-50' : '';
+                const item = document.createElement('div');
+                item.className = `p-4 border-b border-stone-100 ${bgClass}`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="font-medium text-stone-900">${profile.handle}</span>
+                        <span class="text-xs px-2 py-1 bg-stone-200 text-stone-700 rounded">${profile.category}</span>
+                    </div>
+                    <p class="text-sm text-stone-600">${profile.notes}</p>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('followerChart').getContext('2d');
+            const labels = Object.keys(categoryCounts);
+            const data = Object.values(categoryCounts);
+            const bgColors = labels.map(label => chartColors[label]);
+
+            followerChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: bgColors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 20, font: { family: "'Inter', sans-serif" } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + ' profiles';
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            const selectedCategory = labels[idx];
+                            renderProfiles(selectedCategory);
+                            document.getElementById('resetFilterBtn').classList.remove('hidden');
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('resetFilterBtn').addEventListener('click', (e) => {
+            renderProfiles(null);
+            e.target.classList.add('hidden');
+        });
+
+        renderProfiles(null);
+    </script>
+</body>
+</html>
